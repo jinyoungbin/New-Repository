@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { POSES } from '@/data/poses';
 import PoseCard from '@/components/PoseCard';
@@ -46,6 +47,11 @@ export default function PosesPage() {
                     <PoseCard key={pose.id} pose={pose} />
                 ))}
             </div>
+
+            <Link to="/consult" className={styles.fab}>
+                <span className={styles.fabIcon}>✨</span>
+                AI Director
+            </Link>
         </main>
     );
 }
