@@ -1,0 +1,116 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.formSection {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto 4rem;
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: hsl(var(--color-primary));
+}
+
+.subtitle {
+    color: hsl(var(--color-text-muted));
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.textarea {
+    width: 100%;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid hsl(var(--color-accent));
+    font-family: var(--font-body);
+    font-size: 1rem;
+    resize: none;
+    background-color: hsl(var(--color-surface));
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: hsl(var(--color-primary));
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.submitBtn {
+    padding: 1rem;
+    background-color: hsl(var(--color-primary));
+    color: hsl(var(--color-primary-foreground));
+    border-radius: var(--radius-full);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.submitBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.resultsSection {
+    flex-grow: 1;
+}
+
+.resultsTitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: hsl(var(--color-text-main));
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.uploadSection {
+    margin-bottom: 1rem;
+}
+
+.uploadLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 2rem;
+    border: 2px dashed hsl(var(--color-accent));
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: hsl(var(--color-surface));
+}
+
+.uploadLabel:hover {
+    border-color: hsl(var(--color-primary));
+    background-color: hsl(var(--color-surface-dim));
+}
+
+.fileInput {
+    display: none;
+}
+
+.uploadText {
+    color: hsl(var(--color-text-muted));
+    font-weight: 500;
+}

@@ -1,0 +1,106 @@
+.container {
+    margin-top: 3rem;
+    border-top: 1px solid #eee;
+    padding-top: 2rem;
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: var(--radius-full);
+    font-size: 1rem;
+}
+
+.submitBtn {
+    padding: 0.75rem 1.5rem;
+    background-color: hsl(var(--color-primary));
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.submitBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.commentList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.comment {
+    display: flex;
+    gap: 1rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #666;
+}
+
+.commentContent {
+    flex: 1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+}
+
+.author {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.date {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: hsl(var(--color-text-main));
+}
+
+.deleteBtn {
+    background: none;
+    border: none;
+    color: #ff4444;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.comment:hover .deleteBtn {
+    opacity: 1;
+}
