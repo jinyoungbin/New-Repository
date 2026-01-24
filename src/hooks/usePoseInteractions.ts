@@ -1,4 +1,16 @@
 import { useState, useEffect } from 'react';
+import { db } from '@/lib/firebase';
+import {
+    collection,
+    doc,
+    onSnapshot,
+    addDoc,
+    setDoc,
+    query,
+    orderBy,
+    serverTimestamp,
+    getDoc
+} from 'firebase/firestore';
 
 export interface Comment {
     id: string;
@@ -12,52 +24,83 @@ export function usePoseInteractions(poseId: string) {
     const [isLiked, setIsLiked] = useState(false);
     const [comments, setComments] = useState<Comment[]>([]);
 
-    // Load from localStorage on mount
+    // Load Likes & Listen for updates
     useEffect(() => {
-        const storedLikes = localStorage.getItem(`pose_likes_${poseId}`);
-        const storedIsLiked = localStorage.getItem(`pose_is_liked_${poseId}`);
-        const storedComments = localStorage.getItem(`pose_comments_${poseId}`);
+        const likesRef = doc(db, 'likes', poseId);
 
-        if (storedLikes) setLikes(parseInt(storedLikes));
-        if (storedIsLiked === 'true') setIsLiked(true);
-        if (storedComments) setComments(JSON.parse(storedComments));
-        else {
-            // Default/Mock comments for demo
-            setComments([
-                { id: '1', author: 'CameraLover', text: 'Totally tried this at a cafe yesterday!', date: new Date(Date.now() - 86400000).toISOString() },
-            ]);
-        }
+        // Listen to likes count
+        const unsubscribe = onSnapshot(likesRef, (doc) => {
+            if (doc.exists()) {
+                setLikes(doc.data().count || 0);
+            }
+        });
+
+        // Check if I liked locally (Simulated "My Like" state)
+        const myLike = localStorage.getItem(`my_like_${poseId}`);
+        if (myLike === 'true') setIsLiked(true);
+
+        return () => unsubscribe();
     }, [poseId]);
 
-    const toggleLike = () => {
+    // Load Comments & Listen for real-time updates
+    useEffect(() => {
+        const commentsRef = collection(db, 'poses', poseId, 'comments');
+        const q = query(commentsRef, orderBy('createdAt', 'desc'));
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const newComments = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    text: data.text,
+                    author: data.author,
+                    date: data.createdAt?.toDate().toISOString() || new Date().toISOString()
+                };
+            });
+            setComments(newComments);
+        });
+
+        return () => unsubscribe();
+    }, [poseId]);
+
+    const toggleLike = async () => {
         const newIsLiked = !isLiked;
-        const newLikes = newIsLiked ? likes + 1 : likes - 1;
-
         setIsLiked(newIsLiked);
-        setLikes(newLikes);
+        localStorage.setItem(`my_like_${poseId}`, newIsLiked.toString());
 
-        localStorage.setItem(`pose_likes_${poseId}`, newLikes.toString());
-        localStorage.setItem(`pose_is_liked_${poseId}`, newIsLiked.toString());
+        try {
+            const likesRef = doc(db, 'likes', poseId);
+            const docSnap = await getDoc(likesRef);
+
+            let currentCount = 0;
+            if (docSnap.exists()) {
+                currentCount = docSnap.data().count;
+            }
+
+            const newCount = newIsLiked ? currentCount + 1 : Math.max(0, currentCount - 1);
+            await setDoc(likesRef, { count: newCount });
+        } catch (e) {
+            console.error("Like Error:", e);
+        }
     };
 
-    const addComment = (text: string, author: string = 'Guest User') => {
-        const newComment: Comment = {
-            id: Date.now().toString(),
-            text,
-            date: new Date().toISOString(),
-            author: author
-        };
-
-        const newComments = [newComment, ...comments];
-        setComments(newComments);
-        localStorage.setItem(`pose_comments_${poseId}`, JSON.stringify(newComments));
+    const addComment = async (text: string, author: string = 'Guest User') => {
+        try {
+            const commentsRef = collection(db, 'poses', poseId, 'comments');
+            await addDoc(commentsRef, {
+                text,
+                author,
+                createdAt: serverTimestamp()
+            });
+        } catch (e) {
+            console.error("Comment Error:", e);
+        }
     };
 
-    const deleteComment = (commentId: string) => {
-        const newComments = comments.filter(c => c.id !== commentId);
-        setComments(newComments);
-        localStorage.setItem(`pose_comments_${poseId}`, JSON.stringify(newComments));
-    }
+    const deleteComment = async (commentId: string) => {
+        console.log("Delete not implemented for security safety in prototype");
+        setComments(prev => prev.filter(c => c.id !== commentId));
+    };
 
     return { likes, isLiked, toggleLike, comments, addComment, deleteComment };
 }
