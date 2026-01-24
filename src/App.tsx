@@ -6,6 +6,10 @@ import PosesPage from '@/pages/Poses';
 import PoseDetailPage from '@/pages/PoseDetail';
 import ConsultPage from '@/pages/Consult';
 import LoginPage from '@/pages/Login';
+import { initKakao } from '@/lib/kakao';
+
+// Initialize Kakao SDK
+initKakao();
 
 function App() {
     return (

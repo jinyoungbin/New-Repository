@@ -29,22 +29,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const loginWithKakao = async () => {
-        return new Promise<void>((resolve) => {
-            // Simulate network request
-            setTimeout(() => {
-                const mockUser: User = {
-                    nickname: '김카카오', // Randomized or fixed for demo
-                    profileImage: 'https://placehold.co/100x100/FEE500/000000?text=K',
-                    isKakao: true
-                };
-                setUser(mockUser);
-                localStorage.setItem('auth_user', JSON.stringify(mockUser));
-                resolve();
-            }, 1000);
+        return new Promise<void>((resolve, reject) => {
+            if (!window.Kakao) {
+                console.error('Kakao SDK not loaded');
+                return;
+            }
+
+            window.Kakao.Auth.login({
+                success: function () {
+                    window.Kakao.API.request({
+                        url: '/v2/user/me',
+                        success: function (res: any) {
+                            const kakaoAccount = res.kakao_account;
+                            const newUser: User = {
+                                nickname: kakaoAccount.profile.nickname,
+                                profileImage: kakaoAccount.profile.thumbnail_image_url || 'https://placehold.co/100x100/FEE500/000000?text=K',
+                                isKakao: true
+                            };
+                            setUser(newUser);
+                            localStorage.setItem('auth_user', JSON.stringify(newUser));
+                            resolve();
+                        },
+                        fail: function (error: any) {
+                            console.error('Failed to get user info', error);
+                            reject(error);
+                        },
+                    });
+                },
+                fail: function (err: any) {
+                    console.error('Login Failed', err);
+                    reject(err);
+                },
+            });
         });
     };
 
     const logout = () => {
+        if (window.Kakao && window.Kakao.Auth.getAccessToken()) {
+            window.Kakao.Auth.logout(() => {
+                console.log('Kakao logout success');
+            });
+        }
         setUser(null);
         localStorage.removeItem('auth_user');
     };
