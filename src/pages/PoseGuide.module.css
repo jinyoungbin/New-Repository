@@ -1,0 +1,294 @@
+.container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stepContainer {
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Step 1: Upload */
+.uploadBox {
+    border: 2px dashed #444;
+    border-radius: 20px;
+    padding: 40px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.uploadBox:hover {
+    border-color: #4ECDC4;
+    background: #222;
+}
+
+.iconLarge {
+    font-size: 48px;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+/* Step 2: Vibe */
+.previewImage {
+    max-width: 100%;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.inputGroup {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.textInput {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: white;
+}
+
+.generateBtn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.chip {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: #333;
+    border: 1px solid #444;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.chip:hover {
+    background: #444;
+}
+
+/* Step 3: Overlay / Result */
+.overlayContainer {
+    position: relative;
+    width: 100%;
+    /* overflow: hidden; Removed to allow leveler to be visible if needed, but usually we want it contained */
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    user-select: none;
+    touch-action: none;
+    background: #000;
+}
+
+.baseImage {
+    width: 100%;
+    display: block;
+    pointer-events: none;
+}
+
+.videoFeed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Invisible layer to capture touches/clicks */
+.dummyTouchArea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    cursor: move;
+}
+
+.guideOverlay {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.guidePath {
+    fill: none;
+    stroke: white;
+    stroke-width: 3;
+    stroke-dasharray: 10, 5;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.9));
+    vector-effect: non-scaling-stroke;
+}
+
+.scaleControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    padding: 10px;
+    background: #222;
+    border-radius: 30px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.scaleControls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: #444;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.actionBtn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.primaryBtn {
+    background: #4ECDC4;
+    color: #000;
+    font-weight: bold;
+}
+
+/* Leveler Styles */
+.levelerContainer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    pointer-events: none;
+}
+
+.levelIndicator {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+.levelGood {
+    background: rgba(46, 204, 113, 0.8);
+    /* Green */
+}
+
+.levelBad {
+    background: rgba(231, 76, 60, 0.8);
+    /* Red */
+}
+
+.shutterBtn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s;
+}
+
+.shutterBtn:active {
+    transform: scale(0.95);
+    background: #ddd;
+}
+
+.feetLine {
+    position: absolute;
+    bottom: 15%;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 15;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.feetText {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #fff;
+    transform: translateY(-50%);
+}

@@ -1,0 +1,236 @@
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    /* Card width */
+    height: 500px;
+    /* Fixed height to prevent collapse */
+    /* Fixed height to prevent collapse */
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Background Image Simulation */
+.bgImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+    mix-blend-mode: luminosity;
+    /* Use a placeholder abstract pattern or user can replace with real img */
+    background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+}
+
+/* The Scan Line */
+.scanLine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #4ECDC4;
+    box-shadow: 0 0 15px #4ECDC4, 0 0 30px #4ECDC4;
+    animation: scan 3s ease-in-out infinite;
+    z-index: 10;
+}
+
+/* Scan Shader Effect */
+.scanShader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, rgba(78, 205, 196, 0.2), transparent);
+    animation: scanShader 3s ease-in-out infinite;
+    z-index: 9;
+}
+
+@keyframes scan {
+    0% {
+        top: -5%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 105%;
+        opacity: 0;
+    }
+}
+
+@keyframes scanShader {
+    0% {
+        top: -105px;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+/* Target Box (Face detection style) */
+.targetBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40%;
+    height: 30%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.targetCorner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: #FF6B6B;
+    border-style: solid;
+    transition: all 0.3s;
+}
+
+.tl {
+    top: -2px;
+    left: -2px;
+    border-width: 3px 0 0 3px;
+    border-radius: 8px 0 0 0;
+}
+
+.tr {
+    top: -2px;
+    right: -2px;
+    border-width: 3px 3px 0 0;
+    border-radius: 0 8px 0 0;
+}
+
+.bl {
+    bottom: -2px;
+    left: -2px;
+    border-width: 0 0 3px 3px;
+    border-radius: 0 0 0 8px;
+}
+
+.br {
+    bottom: -2px;
+    right: -2px;
+    border-width: 0 3px 3px 0;
+    border-radius: 0 0 8px 0;
+}
+
+/* Data Bubbles */
+.dataContainer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    pointer-events: none;
+}
+
+.bubble {
+    position: absolute;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    padding: 10px 15px;
+    border-radius: 12px;
+    border-left: 3px solid #4ECDC4;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: popIn 3s infinite;
+}
+
+.icon {
+    font-size: 16px;
+}
+
+/* Stagger Animations */
+.b1 {
+    top: 20%;
+    animation-delay: 0.5s;
+    border-color: #FF6B6B;
+}
+
+.b2 {
+    top: 40%;
+    animation-delay: 1.2s;
+    border-color: #FF8E53;
+}
+
+.b3 {
+    top: 60%;
+    animation-delay: 2.0s;
+    border-color: #4ECDC4;
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: translateX(20px) scale(0.9);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+
+    90% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.scanText {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #4ECDC4;
+    font-family: monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px #4ECDC4;
+    opacity: 0.8;
+}

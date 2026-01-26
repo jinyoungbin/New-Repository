@@ -9,6 +9,7 @@ export default function LoginPage() {
 
     const handleKakaoLogin = async () => {
         await loginWithKakao();
+        console.log('Login completed, redirecting...');
         navigate('/'); // Redirect to home after login
     };
 

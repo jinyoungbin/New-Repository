@@ -1,0 +1,385 @@
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    min-height: 80vh;
+}
+
+.profileCard {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.name {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--color-text-main);
+}
+
+.badge {
+    background: #FEE500;
+    color: #3C1E1E;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    display: inline-block;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 40px;
+}
+
+.statItem {
+    background: var(--color-background);
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.statItem:hover {
+    background: #f8f8f8;
+    transform: translateY(-2px);
+}
+
+.statItem.active {
+    background: white;
+    border-color: #FF6B6B;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.1);
+}
+
+.statItem.active .statValue {
+    color: #FF6B6B;
+}
+
+.statValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.statLabel {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+}
+
+.emptyState {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    color: var(--color-text-muted);
+}
+
+.logoutBtn {
+    margin-top: 20px;
+    padding: 12px 30px;
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    background: white;
+    border-radius: 100px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+    background: #ff6b6b;
+    color: white;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.pageBtn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+    color: #555;
+}
+
+.pageBtn:hover:not(:disabled) {
+    background: #FF6B6B;
+    color: white;
+    border-color: #FF6B6B;
+}
+
+.pageBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f5f5f5;
+}
+
+.pageInfo {
+    font-size: 0.9rem;
+    color: #888;
+    font-weight: 500;
+}
+
+.historyList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.historyItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    text-align: left;
+    transition: transform 0.2s;
+}
+
+.historyItem:hover {
+    transform: translateX(4px);
+    border-color: #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.historyThumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f0f0f0;
+    border: 1px solid #eee;
+}
+
+.historyInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.historyDate {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+
+/* ... existing styles ... */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Center horizontally */
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+    overflow-y: auto;
+    /* Allow scrolling */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modalContent {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    position: relative;
+    max-height: 90vh;
+    display: flex;
+    /* Flex layout */
+    flex-direction: column;
+    /* Vertical stack */
+    overflow: hidden;
+    /* Prevent internal scroll issues */
+    animation: slideUp 0.3s ease;
+}
+
+/* Ensure body scroll is handled */
+.modalScrollable {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 5px;
+    /* prevent toggle flicker */
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.closeBtn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #f0f0f0;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.closeBtn:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.modalImage {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    /* Don't crop, show full */
+    background: #111;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+/* Reusing Recipe styles concept */
+.recipeGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recipeItem {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #FAFAFA;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.iconBox {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.infoBox {
+    flex: 1;
+    text-align: left;
+}
+
+.label {
+    font-size: 0.75rem;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    display: block;
+}
+
+.value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.subValue {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+.tipBox {
+    background: rgba(78, 205, 196, 0.1);
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.tipText {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #2B7A74;
+    font-style: italic;
+    margin: 5px 0 0 0;
+}
