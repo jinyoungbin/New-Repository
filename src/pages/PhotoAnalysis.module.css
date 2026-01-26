@@ -273,3 +273,32 @@
         transform: rotate(360deg);
     }
 }
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        margin: 20px auto;
+        width: 100%;
+        overflow-x: hidden;
+        /* Prevent horizontal scroll */
+    }
+
+    .resultSection {
+        padding: 20px;
+    }
+
+    .analyzeBtn {
+        padding: 12px 20px;
+        /* Reduce padding on mobile */
+        font-size: 0.95rem;
+    }
+
+    /* Allow buttons to stack if needed or shrink */
+    .analyzeBtn {
+        white-space: normal;
+        /* Allow text wrap if necessary */
+        min-width: 0;
+        /* Allow flex shrink */
+    }
+}

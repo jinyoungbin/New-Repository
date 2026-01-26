@@ -212,10 +212,10 @@ export default function PhotoAnalysis() {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30, gap: '10px', flexWrap: 'wrap' }}>
                             <button
                                 className={styles.analyzeBtn}
-                                style={{ flex: 1, background: '#333' }}
+                                style={{ flex: '1 1 auto', background: '#333', minWidth: '120px' }}
                                 onClick={() => {
                                     setImageSrc(null);
                                     setFile(null);
@@ -227,7 +227,7 @@ export default function PhotoAnalysis() {
                             <button
                                 onClick={handleSaveAsPose}
                                 className={styles.analyzeBtn}
-                                style={{ flex: 1, background: '#FF6B6B', color: 'white', border: 'none', marginLeft: '10px' }}
+                                style={{ flex: '1 1 auto', background: '#FF6B6B', color: 'white', border: 'none', minWidth: '120px' }}
                             >
                                 ❤️ {t('analysis.save_recipe', 'Save Recipe')}
                             </button>
