@@ -32,15 +32,24 @@ export function shareKakao(title: string, description: string, imageUrl?: string
                     mobileWebUrl: targetUrl,
                     webUrl: targetUrl,
                 },
+                imageWidth: 600,
+                imageHeight: 600,
             },
             buttons: [
                 {
-                    title: '나도 도전하기 🏆',
+                    title: '이 점수 이겨보기 👊',
                     link: {
                         mobileWebUrl: targetUrl,
                         webUrl: targetUrl,
                     },
                 },
+                {
+                    title: '앱 구경하기 👀',
+                    link: {
+                        mobileWebUrl: window.location.origin,
+                        webUrl: window.location.origin,
+                    },
+                }
             ],
         });
     } catch (e) {

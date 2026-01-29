@@ -195,8 +195,9 @@ export default function PhotoScoring() {
                         {t('scoring.btn_retry', 'Evaluate Another Photo')}
                     </button>
                     <ShareButtons
-                        title={`My Photo Score: ${result.score}! 🏆`}
-                        description="Can you beat my score? Check out PoseDirector!"
+                        title={`AI가 분석한 제 인생샷 점수는 ${result.score}점! 📸`}
+                        description="상위 1% 포즈에 도전하세요! (내 점수 측정하기)"
+                        imageUrl={`${window.location.origin}/assets/images/${result.score >= 80 ? 'tier_gold.png' : 'tier_silver.png'}`}
                     />
                 </div>
             )}

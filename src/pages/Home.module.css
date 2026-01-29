@@ -1,11 +1,13 @@
 .main {
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  /* Fits in one screen */
+  min-height: 100vh;
+  /* Changed from height to min-height */
+  /* overflow: hidden; Removed to allow scrolling */
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem 0;
+  /* Added padding to ensure spacing on top/bottom */
 }
 
 .splitLayout {
@@ -13,7 +15,7 @@
   grid-template-columns: 1fr 1fr;
   width: 100%;
   max-width: 1400px;
-  height: 90vh;
+  /* height: 90vh; Removed fixed height */
   gap: 2rem;
   padding: 0 4rem;
 }
@@ -51,7 +53,7 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 2rem;
-  height: 300px;
+  min-height: 300px;
   /* Fixed height for perfect alignment */
   justify-content: space-between;
   /* Title at top, Button at bottom */
