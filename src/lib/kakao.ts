@@ -30,7 +30,7 @@ export async function uploadKakaoImage(file: File): Promise<string> {
     }
 }
 
-export function shareKakao(title: string, description: string, imageUrl?: string, linkUrl?: string, buttonTitle: string = '이 점수 이겨보기 👊') {
+export function shareKakao(title: string, description: string, imageUrl?: string, linkUrl?: string, buttonTitle: string = '자세히 보기') {
     if (!window.Kakao || !window.Kakao.isInitialized()) {
         console.warn('Kakao SDK not initialized');
         return;

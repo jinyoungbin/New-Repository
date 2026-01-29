@@ -238,7 +238,7 @@ export default function PhotoAnalysis() {
                             <ShareButtons
                                 title="Check out my AI Photo Recipe! 📸"
                                 description={`${getText(result.lighting.type)} lighting, ${getText(result.camera.angle)} angle. Analyzed by PoseDirector.`}
-                                buttonTitle="분석 결과 보기 👀"
+                                buttonTitle="분석 결과 확인"
                             />
                         </div>
                     </div>

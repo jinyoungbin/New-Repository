@@ -200,7 +200,7 @@ export default function PhotoScoring() {
                         imageUrl={`${window.location.origin}/assets/images/${result.score >= 80 ? 'tier_gold.png' : 'tier_silver.png'}`}
                         imageFile={file} // Pass the actual user file for upload
                         url="/scoring" // Pass relative path, let kakao.ts handle domain
-                        buttonTitle="이 점수 이겨보기 👊"
+                        buttonTitle="점수 확인하기"
                     />
                 </div>
             )}
