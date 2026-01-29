@@ -198,6 +198,8 @@ export default function PhotoScoring() {
                         title={`AI가 분석한 제 인생샷 점수는 ${result.score}점! 📸`}
                         description="상위 1% 포즈에 도전하세요! (내 점수 측정하기)"
                         imageUrl={`${window.location.origin}/assets/images/${result.score >= 80 ? 'tier_gold.png' : 'tier_silver.png'}`}
+                        imageFile={file} // Pass the actual user file for upload
+                        url={`${window.location.origin}/scoring`} // Deep link to scoring page
                     />
                 </div>
             )}

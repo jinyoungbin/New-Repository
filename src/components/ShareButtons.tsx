@@ -1,13 +1,16 @@
-import { shareKakao } from '@/lib/kakao';
+import { shareKakao, uploadKakaoImage } from '@/lib/kakao';
+import { useState } from 'react';
 
 interface ShareButtonsProps {
     title: string;
     description: string;
     url?: string;
     imageUrl?: string;
+    imageFile?: File | null; // Optional file to upload
 }
 
-export default function ShareButtons({ title, description, url = window.location.href, imageUrl }: ShareButtonsProps) {
+export default function ShareButtons({ title, description, url = window.location.href, imageUrl, imageFile }: ShareButtonsProps) {
+    const [isSharing, setIsSharing] = useState(false);
 
     const handleTwitter = () => {
         const text = `${title}\n${description}`;
@@ -24,8 +27,22 @@ export default function ShareButtons({ title, description, url = window.location
         }
     };
 
-    const handleKakao = () => {
-        shareKakao(title, description, imageUrl, url);
+    const handleKakao = async () => {
+        if (isSharing) return;
+        setIsSharing(true);
+
+        let finalImageUrl = imageUrl;
+
+        // If a file is provided, try uploading it to Kakao first
+        if (imageFile) {
+            const uploadedUrl = await uploadKakaoImage(imageFile);
+            if (uploadedUrl) {
+                finalImageUrl = uploadedUrl;
+            }
+        }
+
+        shareKakao(title, description, finalImageUrl, url);
+        setIsSharing(false);
     };
 
     return (
@@ -33,23 +50,25 @@ export default function ShareButtons({ title, description, url = window.location
             {/* Kakao Button */}
             <button
                 onClick={handleKakao}
+                disabled={isSharing}
                 style={{
                     width: '48px',
                     height: '48px',
                     borderRadius: '50%',
                     border: 'none',
-                    backgroundColor: '#FEE500', // Kakao Yellow
+                    backgroundColor: isSharing ? '#e0e0e0' : '#FEE500', // Dim if sharing
                     color: '#000',
                     fontSize: '24px',
-                    cursor: 'pointer',
+                    cursor: isSharing ? 'wait' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    transition: 'background-color 0.2s'
                 }}
                 title="Share to KakaoTalk"
             >
-                💬
+                {isSharing ? '⏳' : '💬'}
             </button>
 
             {/* Twitter/X Button */}
