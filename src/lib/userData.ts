@@ -1,6 +1,8 @@
 import { AnalysisResult, LocalizedText } from './photoAnalysis';
 import { ScoringResult } from './photoScoring';
 import { Pose } from '@/data/poses';
+import { db } from './firebase';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 
 export interface SavedAnalysis {
     id: string; // timestamp
@@ -80,9 +82,68 @@ export const getUserData = (userId: string): UserData => {
 };
 
 export const saveUserData = (userData: UserData) => {
+    // 1. Save locally (always as backup/cache)
     const key = getStorageKey(userData.id);
     localStorage.setItem(key, JSON.stringify(userData));
+
+    // 2. Save to Firestore (if online/valid user)
+    // We do this "fire and forget" style here, user hook should handle main sync
+    saveUserDataToFirestore(userData.id, userData).catch(e =>
+        console.error("Background sync failed:", e)
+    );
 };
+
+// --- Firestore Integration ---
+
+export const saveUserDataToFirestore = async (userId: string, data: UserData) => {
+    try {
+        await setDoc(doc(db, "users", userId), data, { merge: true });
+    } catch (e) {
+        console.error("Error saving to Firestore:", e);
+        throw e;
+    }
+};
+
+export const subscribeToUserData = (userId: string, onUpdate: (data: UserData) => void) => {
+    const unsubscribe = onSnapshot(doc(db, "users", userId), (docSnap) => {
+        if (docSnap.exists()) {
+            const cloudData = docSnap.data() as UserData;
+            // Ensure structure
+            const merged: UserData = {
+                id: userId,
+                savedPoseIds: cloudData.savedPoseIds || [],
+                customPoses: cloudData.customPoses || [],
+                history: cloudData.history || [],
+                scoringHistory: cloudData.scoringHistory || []
+            };
+            onUpdate(merged);
+
+            // Update local cache too, so next load is faster/consistent
+            const key = getStorageKey(userId);
+            localStorage.setItem(key, JSON.stringify(merged));
+        } else {
+            // New user on cloud? Check if we have local data to upload (Migration)
+            console.log("No cloud data found. If local data exists, it should be uploaded.");
+            const local = getUserData(userId);
+            if (local.savedPoseIds.length > 0 || local.history.length > 0) {
+                saveUserDataToFirestore(userId, local);
+            } else {
+                // Initialize empty on cloud
+                saveUserDataToFirestore(userId, {
+                    id: userId,
+                    savedPoseIds: [],
+                    customPoses: [],
+                    history: [],
+                    scoringHistory: []
+                });
+            }
+        }
+    });
+
+    return unsubscribe;
+};
+
+// -----------------------------
 
 export const toggleSavedPose = (userId: string, poseId: string): boolean => {
     const data = getUserData(userId);
