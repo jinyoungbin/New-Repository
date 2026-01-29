@@ -138,7 +138,14 @@ export const subscribeToUserData = (userId: string, onUpdate: (data: UserData) =
                 });
             }
         }
-    });
+        (error) => {
+            console.error("Firestore subscription error:", error);
+            if (error.code === 'permission-denied') {
+                console.warn("⚠️ PERMISSION DENIED: Check your Firestore Security Rules immediately.");
+                console.warn("If you are not using Firebase Auth, rules must be 'allow read, write: if true;' (for test mode) or match the document ID.");
+            }
+        }
+    );
 
     return unsubscribe;
 };
