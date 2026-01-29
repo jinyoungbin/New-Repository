@@ -113,10 +113,8 @@ export default function MyPage() {
                                                             alt="Thumbnail"
                                                             className={styles.historyThumb}
                                                         />
-                                                        <div className={styles.historyInfo}>
-                                                            <div className={styles.historyDate}>{new Date(item.date).toLocaleDateString()}</div>
-                                                            <div className={styles.historyText}>{summaryText}</div>
-                                                        </div>
+                                                        {/* Text removed as per request, just image */}
+                                                        <div style={{ flex: 1 }}></div>
                                                         <button
                                                             className={styles.deleteBtn}
                                                             onClick={(e) => {
@@ -177,12 +175,10 @@ export default function MyPage() {
                                                         className={styles.historyThumb}
                                                     />
                                                     <div className={styles.historyInfo}>
-                                                        <div className={styles.historyDate}>{new Date(item.date).toLocaleDateString()}</div>
                                                         <div className={styles.historyText}>
-                                                            <span style={{ fontWeight: 'bold', color: '#FF6B6B', marginRight: '8px' }}>
+                                                            <span style={{ fontWeight: 'bold', color: '#FF6B6B', fontSize: '1.2rem' }}>
                                                                 {item.score}pts
                                                             </span>
-                                                            {getText(item.title)}
                                                         </div>
                                                     </div>
                                                     <button
