@@ -54,6 +54,8 @@
     font-weight: 600;
     color: hsl(var(--color-primary));
     font-size: 0.9rem;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .profile {
@@ -84,4 +86,38 @@
 
 .mainContent {
     /* Ensure content doesn't get hidden behind fixed headers if we had one */
+    position: relative;
+}
+
+.guideLink {
+    text-decoration: none;
+    color: var(--color-text-muted, #666);
+    font-weight: 500;
+    margin-right: 10px;
+    white-space: nowrap;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.guideLink:hover {
+    color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+
+    .logoText {
+        display: none !important;
+    }
+
+    .navRight {
+        gap: 0.75rem;
+    }
+
+    .guideLink {
+        font-size: 0.9rem;
+        margin-right: 5px;
+    }
 }

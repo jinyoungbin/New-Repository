@@ -14,11 +14,11 @@ export default function Layout() {
                 <nav className={styles.navbar}>
                     <Link to="/" className={styles.logo}>
                         <div className={styles.logoMark}>PD</div>
-                        PoseDirector
+                        <span className={styles.logoText}>PoseDirector</span>
                     </Link>
 
                     <div className={styles.navRight}>
-                        <Link to="/blog" style={{ textDecoration: 'none', color: 'var(--color-text-muted)', fontWeight: 500, marginRight: '10px' }}>{t('nav.guide')}</Link>
+                        <Link to="/blog" className={styles.guideLink}>{t('nav.guide')}</Link>
 
                         {user ? (
                             <div className={styles.profile}>
