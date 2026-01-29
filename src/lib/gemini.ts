@@ -17,5 +17,11 @@ export const getGeminiModel = () => {
     }
     // Using the cost-effective Flash model
     // Updated to user requested model
-    return genAI.getGenerativeModel({ model: "gemini-2.5-flash-image" });
+    return genAI.getGenerativeModel({
+        model: "gemini-2.5-flash-image",
+        generationConfig: {
+            temperature: 0.1, // Low temperature for deterministic/consistent results
+            maxOutputTokens: 1000,
+        }
+    });
 };

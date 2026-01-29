@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useUserData } from '@/hooks/useUserData';
-import { SavedAnalysis, deleteAnalysisResult, deleteCustomPose } from '@/lib/userData';
+import { SavedAnalysis, SavedScore, deleteAnalysisResult, deleteCustomPose, deleteScoringResult } from '@/lib/userData';
 import { LocalizedText } from '@/lib/photoAnalysis';
 import { POSES, Pose } from '@/data/poses';
 import styles from './MyPage.module.css';
@@ -16,12 +16,13 @@ export default function MyPage() {
 
     // UI State
     // UI State
-    const [activeTab, setActiveTab] = useState<'analysis' | 'poses'>('analysis');
+    const [activeTab, setActiveTab] = useState<'analysis' | 'poses' | 'scoring'>('analysis');
     const [page, setPage] = useState(1);
     const ITEMS_PER_PAGE = 5;
 
     const [selectedAnalysis, setSelectedAnalysis] = useState<SavedAnalysis | null>(null);
     const [selectedPose, setSelectedPose] = useState<Pose | null>(null);
+    const [selectedScore, setSelectedScore] = useState<SavedScore | null>(null);
 
     const handleLogout = () => {
         logout();
@@ -62,6 +63,13 @@ export default function MyPage() {
                     >
                         <span className={styles.statValue}>{analyzedCount}</span>
                         <span className={styles.statLabel}>{t('mypage.analyzed_count')}</span>
+                    </div>
+                    <div
+                        className={`${styles.statItem} ${activeTab === 'scoring' ? styles.active : ''}`}
+                        onClick={() => { setActiveTab('scoring'); setPage(1); }}
+                    >
+                        <span className={styles.statValue}>{userData?.scoringHistory?.length || 0}</span>
+                        <span className={styles.statLabel}>Scores</span>
                     </div>
                     <div
                         className={`${styles.statItem} ${activeTab === 'poses' ? styles.active : ''}`}
@@ -147,6 +155,73 @@ export default function MyPage() {
                                 </>
                             ) : (
                                 t('mypage.empty_activity')
+                            )}
+                        </>
+                    ) : activeTab === 'scoring' ? (
+                        <>
+                            {(userData?.scoringHistory?.length || 0) > 0 ? (
+                                <>
+                                    <div className={styles.historyList}>
+                                        {userData!.scoringHistory
+                                            .slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
+                                            .map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    className={styles.historyItem}
+                                                    onClick={() => setSelectedScore(item)}
+                                                    style={{ cursor: 'pointer', position: 'relative' }}
+                                                >
+                                                    <img
+                                                        src={item.thumbnail || 'https://placehold.co/100x100/eeeeee/999999?text=No+Img'}
+                                                        alt="Thumbnail"
+                                                        className={styles.historyThumb}
+                                                    />
+                                                    <div className={styles.historyInfo}>
+                                                        <div className={styles.historyDate}>{new Date(item.date).toLocaleDateString()}</div>
+                                                        <div className={styles.historyText}>
+                                                            <span style={{ fontWeight: 'bold', color: '#FF6B6B', marginRight: '8px' }}>
+                                                                {item.score}pts
+                                                            </span>
+                                                            {getText(item.title)}
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        className={styles.deleteBtn}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            if (window.confirm(t('mypage.confirm_delete', 'Are you sure you want to delete this?'))) {
+                                                                deleteScoringResult(user.id, item.id);
+                                                            }
+                                                        }}
+                                                    >
+                                                        🗑️
+                                                    </button>
+                                                </div>
+                                            ))}
+                                    </div>
+                                    {/* Pagination Controls */}
+                                    {Math.ceil((userData?.scoringHistory?.length || 0) / ITEMS_PER_PAGE) > 1 && (
+                                        <div className={styles.pagination}>
+                                            <button
+                                                disabled={page === 1}
+                                                onClick={() => setPage(p => Math.max(1, p - 1))}
+                                                className={styles.pageBtn}
+                                            >
+                                                &lt;
+                                            </button>
+                                            <span className={styles.pageInfo}>{page} / {Math.ceil((userData?.scoringHistory?.length || 0) / ITEMS_PER_PAGE)}</span>
+                                            <button
+                                                disabled={page === Math.ceil((userData?.scoringHistory?.length || 0) / ITEMS_PER_PAGE)}
+                                                onClick={() => setPage(p => Math.min(Math.ceil((userData?.scoringHistory?.length || 0) / ITEMS_PER_PAGE), p + 1))}
+                                                className={styles.pageBtn}
+                                            >
+                                                &gt;
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <div style={{ padding: 20 }}>No scoring history yet. Try the Scoring feature!</div>
                             )}
                         </>
                     ) : (
@@ -309,6 +384,57 @@ export default function MyPage() {
                                         <li key={idx} style={{ marginBottom: 5 }}>{tip}</li>
                                     ))}
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Score Detail Modal */}
+            {selectedScore && (
+                <div className={styles.modalOverlay} onClick={() => setSelectedScore(null)}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <button className={styles.closeBtn} onClick={() => setSelectedScore(null)}>✕</button>
+                        <div className={styles.modalScrollable}>
+                            <div style={{ textAlign: 'center', marginBottom: 20 }}>
+                                <div style={{
+                                    width: 80, height: 80, borderRadius: '50%', background: `conic-gradient(#FF6B6B ${selectedScore.score * 3.6}deg, #eee 0deg)`,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto'
+                                }}>
+                                    <span style={{ fontSize: '1.5rem', fontWeight: 'bold', background: 'white', width: 70, height: 70, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        {selectedScore.score}
+                                    </span>
+                                </div>
+                                <h2 style={{ marginTop: 10 }}>{getText(selectedScore.title)}</h2>
+                            </div>
+
+                            <div className={styles.recipeGrid}>
+                                <div className={styles.recipeItem}>
+                                    <div className={styles.infoBox} style={{ width: '100%' }}>
+                                        <span className={styles.label}>Composition</span>
+                                        <div className={styles.value}>{selectedScore.criteria.composition}/100</div>
+                                    </div>
+                                </div>
+                                <div className={styles.recipeItem}>
+                                    <div className={styles.infoBox} style={{ width: '100%' }}>
+                                        <span className={styles.label}>Lighting</span>
+                                        <div className={styles.value}>{selectedScore.criteria.lighting}/100</div>
+                                    </div>
+                                </div>
+                                <div className={styles.recipeItem}>
+                                    <div className={styles.infoBox} style={{ width: '100%' }}>
+                                        <span className={styles.label}>Creativity</span>
+                                        <div className={styles.value}>{selectedScore.criteria.creativity}/100</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={styles.tipBox} style={{ marginTop: 20 }}>
+                                <span className={styles.label} style={{ color: '#4ECDC4' }}>FEEDBACK</span>
+                                <p style={{ marginTop: 5, fontWeight: 'bold' }}>👍 Good</p>
+                                <p style={{ marginBottom: 10 }}>{getText(selectedScore.feedback.good)}</p>
+                                <p style={{ fontWeight: 'bold' }}>💡 Improve</p>
+                                <p>{getText(selectedScore.feedback.improvement)}</p>
                             </div>
                         </div>
                     </div>

@@ -36,7 +36,8 @@
 
 .featureContent {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
+  /* Image Top, Text Bottom */
   align-items: center;
   gap: 2rem;
   width: 100%;
@@ -164,4 +165,6 @@
   .header {
     min-height: auto;
   }
+
+
 }

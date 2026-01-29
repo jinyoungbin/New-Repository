@@ -7,22 +7,30 @@ const resources = {
         translation: {
             "nav": {
                 "explore": "Explore Poses",
-                "director": "Get AI Director"
+                "director": "Get AI Director",
+                "guide": "Guide"
             },
             "home": {
                 "title_part1": "Don't just admire.",
                 "title_part2": "Replicate.",
-                "subtitle_line1": "Upload any photo you love.",
-                "subtitle_line2": "We'll break down the <1>Lighting</1>, <2>Angle</2>, and <3>Pose</3> instantly.",
+                "subtitle": "Upload any photo you love. We'll break down the Lighting, Angle, and Pose instantly.",
+                "feature1": "Expert Lighting Analysis",
+                "feature2": "Optimal Pose Suggestions",
                 "cta_analyze": "Analyze Photo",
                 "cta_practice": "Practice Mode"
             },
             "home_scoring": {
-                "title": "AI Photo Scorer",
+                "title_part1": "Your Photo Score,",
+                "title_part2": "Reveal it now.",
                 "subtitle": "Unsure about your shot? Get an instant AI quality score.",
                 "feature1": "Composition Check",
                 "feature2": "Lighting Quality",
                 "cta": "Check My Score"
+            },
+            "blog": {
+                "title": "PoseDirector Guide",
+                "subtitle": "Tips & Tricks for the Perfect Shot",
+                "back": "← Back to Guide"
             },
             "poses": {
                 "title": "Pose Library",
@@ -65,6 +73,8 @@ const resources = {
                 "analyzing": "Deconstructing Image...",
                 "recipe_title": "📸 The Recipe",
                 "lighting": "Lighting",
+                "angle": "Angle",
+                "pose": "Pose",
                 "tip": "DIRECTOR'S TIP",
                 "new_photo": "Analyze New Photo",
                 "save_recipe": "Save Recipe",
@@ -94,7 +104,8 @@ const resources = {
         translation: {
             "nav": {
                 "explore": "포즈 탐색",
-                "director": "AI 디렉터"
+                "director": "AI 디렉터",
+                "guide": "가이드"
             },
             "home": {
                 "title_part1": "보기만 했던 인생샷,",
@@ -112,6 +123,11 @@ const resources = {
                 "feature1": "구도 적합성",
                 "feature2": "조명 퀄리티",
                 "cta": "내 점수 확인하기"
+            },
+            "blog": {
+                "title": "포즈디렉터 가이드",
+                "subtitle": "인생샷을 위한 꿀팁 & 노하우",
+                "back": "← 목록으로 돌아가기"
             },
             "poses": {
                 "title": "포즈 라이브러리",

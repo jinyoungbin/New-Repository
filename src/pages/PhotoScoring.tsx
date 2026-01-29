@@ -4,9 +4,13 @@ import { evaluatePhoto, ScoringResult } from '@/lib/photoScoring';
 import { LocalizedText } from '@/lib/photoAnalysis';
 import FeatureNav from '@/components/FeatureNav';
 import styles from './PhotoScoring.module.css';
+import { useAuth } from '@/context/AuthContext';
+import { saveScoringResult } from '@/lib/userData';
+import ShareButtons from '@/components/ShareButtons';
 
 export default function PhotoScoring() {
     const { t, i18n } = useTranslation();
+    const { user } = useAuth();
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
     const [result, setResult] = useState<ScoringResult | null>(null);
@@ -30,15 +34,22 @@ export default function PhotoScoring() {
         reader.readAsDataURL(file);
     };
 
+    const [error, setError] = useState<string | null>(null);
+
     const handleAnalyze = async () => {
         if (!file) return;
         setIsLoading(true);
+        setError(null);
         try {
             const data = await evaluatePhoto(file);
             setResult(data);
+
+            if (user?.id && imageSrc) {
+                saveScoringResult(user.id, data, imageSrc);
+            }
         } catch (err) {
             console.error(err);
-            alert("Failed to evaluate photo.");
+            setError("Failed to evaluate photo. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -53,10 +64,6 @@ export default function PhotoScoring() {
             setAnimate(false);
         }
     }, [result]);
-
-
-
-    // ...
 
     return (
         <main className={styles.container}>
@@ -97,6 +104,7 @@ export default function PhotoScoring() {
                         accept="image/*"
                     />
                 </div>
+                {error && <p style={{ color: '#ff6b6b', marginTop: '10px', textAlign: 'center' }}>{error}</p>}
             </div>
 
             {imageSrc && !isLoading && !result && (
@@ -186,6 +194,10 @@ export default function PhotoScoring() {
                     >
                         {t('scoring.btn_retry', 'Evaluate Another Photo')}
                     </button>
+                    <ShareButtons
+                        title={`My Photo Score: ${result.score}! 🏆`}
+                        description="Can you beat my score? Check out PoseDirector!"
+                    />
                 </div>
             )}
         </main>

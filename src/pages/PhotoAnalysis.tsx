@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { saveAnalysisResult, saveCustomPose } from '@/lib/userData';
 import { Pose } from '@/data/poses';
 import FeatureNav from '@/components/FeatureNav';
+import ShareButtons from '@/components/ShareButtons';
 import styles from './PhotoAnalysis.module.css';
 
 export default function PhotoAnalysis() {
@@ -232,9 +233,17 @@ export default function PhotoAnalysis() {
                                 ❤️ {t('analysis.save_recipe', 'Save Recipe')}
                             </button>
                         </div>
+
+                        <div style={{ marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+                            <ShareButtons
+                                title="Check out my AI Photo Recipe! 📸"
+                                description={`${getText(result.lighting.type)} lighting, ${getText(result.camera.angle)} angle. Analyzed by PoseDirector.`}
+                            />
+                        </div>
                     </div>
-                )}
-            </div>
-        </main>
+                )
+                }
+            </div >
+        </main >
     );
 }

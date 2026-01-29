@@ -12,3 +12,38 @@ export function initKakao() {
         console.log('Kakao SDK Initialized');
     }
 }
+
+export function shareKakao(title: string, description: string, imageUrl?: string, linkUrl?: string) {
+    if (!window.Kakao || !window.Kakao.isInitialized()) {
+        console.warn('Kakao SDK not initialized');
+        return;
+    }
+
+    const targetUrl = linkUrl || window.location.href; // Use specific URL or current page
+
+    try {
+        window.Kakao.Share.sendDefault({
+            objectType: 'feed',
+            content: {
+                title: title,
+                description: description,
+                imageUrl: imageUrl || 'https://via.placeholder.com/600x400?text=PoseDirector',
+                link: {
+                    mobileWebUrl: targetUrl,
+                    webUrl: targetUrl,
+                },
+            },
+            buttons: [
+                {
+                    title: '나도 도전하기 🏆',
+                    link: {
+                        mobileWebUrl: targetUrl,
+                        webUrl: targetUrl,
+                    },
+                },
+            ],
+        });
+    } catch (e) {
+        console.error('Kakao Share Failed', e);
+    }
+}

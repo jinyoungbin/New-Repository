@@ -10,6 +10,9 @@ import PoseGuidePage from '@/pages/PoseGuide';
 import PhotoAnalysisPage from '@/pages/PhotoAnalysis';
 import PhotoScoringPage from '@/pages/PhotoScoring';
 import MyPage from '@/pages/MyPage';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import BlogList from '@/pages/BlogList';
+import BlogDetail from '@/pages/BlogDetail';
 import { initKakao } from '@/lib/kakao';
 
 // Initialize Kakao SDK
@@ -30,6 +33,9 @@ function App() {
                         <Route path="/analysis" element={<PhotoAnalysisPage />} />
                         <Route path="/scoring" element={<PhotoScoringPage />} />
                         <Route path="/me" element={<MyPage />} />
+                        <Route path="/privacy" element={<PrivacyPolicy />} />
+                        <Route path="/blog" element={<BlogList />} />
+                        <Route path="/blog/:id" element={<BlogDetail />} />
                     </Route>
                 </Routes>
             </AuthProvider>

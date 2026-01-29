@@ -40,6 +40,15 @@ async function fileToGenerativePart(file: File): Promise<{ inlineData: { data: s
     });
 }
 
+// Compute SHA-256 hash of base64 string for caching
+async function computeImageHash(base64: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(base64);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 export async function analyzePhoto(file: File): Promise<AnalysisResult> {
     const model = getGeminiModel();
 
@@ -48,6 +57,18 @@ export async function analyzePhoto(file: File): Promise<AnalysisResult> {
     }
 
     const imagePart = await fileToGenerativePart(file);
+
+    // Cloud Caching (Simulation via LocalStorage for now)
+    // 1. Compute Hash of the image data
+    const hash = await computeImageHash(imagePart.inlineData.data);
+    const cacheKey = `analysis_cache_${hash}`;
+
+    // 2. Check Cache
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+        console.log("Returning cached analysis result");
+        return JSON.parse(cached) as AnalysisResult;
+    }
 
     const prompt = `
     You are a professional photography instructor. 
@@ -86,8 +107,16 @@ export async function analyzePhoto(file: File): Promise<AnalysisResult> {
 
         // Clean up markdown if Gemini adds it despite instructions
         const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        const parsedResult = JSON.parse(cleanText) as AnalysisResult;
 
-        return JSON.parse(cleanText) as AnalysisResult;
+        // 3. Save to Cache
+        try {
+            localStorage.setItem(cacheKey, JSON.stringify(parsedResult));
+        } catch (e) {
+            console.warn("Failed to cache result (storage likely full)", e);
+        }
+
+        return parsedResult;
     } catch (error) {
         console.error("Analysis Failed:", error);
         // Fallback or rethrow

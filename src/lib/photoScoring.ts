@@ -35,6 +35,15 @@ async function fileToGenerativePart(file: File): Promise<{ inlineData: { data: s
     });
 }
 
+// Compute SHA-256 hash of base64 string for caching
+async function computeImageHash(base64: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(base64);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 export async function evaluatePhoto(file: File): Promise<ScoringResult> {
     const model = getGeminiModel();
 
@@ -43,6 +52,23 @@ export async function evaluatePhoto(file: File): Promise<ScoringResult> {
     }
 
     const imagePart = await fileToGenerativePart(file);
+
+    let cacheKey: string | null = null;
+    try {
+        // Caching Logic
+        // 1. Compute Hash
+        const hash = await computeImageHash(imagePart.inlineData.data);
+        cacheKey = `scoring_cache_${hash}`;
+
+        // 2. Check Cache
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+            console.log("Returning cached scoring result");
+            return JSON.parse(cached) as ScoringResult;
+        }
+    } catch (e) {
+        console.warn("Caching failed or crypto not available, skipping cache.", e);
+    }
 
     const prompt = `
     You are a world-class Photography Judge and Critic.
@@ -86,8 +112,18 @@ export async function evaluatePhoto(file: File): Promise<ScoringResult> {
 
         // Clean up markdown
         const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        const parsedResult = JSON.parse(cleanText) as ScoringResult;
 
-        return JSON.parse(cleanText) as ScoringResult;
+        // 3. Save to Cache
+        if (cacheKey) {
+            try {
+                localStorage.setItem(cacheKey, JSON.stringify(parsedResult));
+            } catch (e) {
+                console.warn("Failed to cache scoring result", e);
+            }
+        }
+
+        return parsedResult;
     } catch (error) {
         console.error("Scoring Failed:", error);
         throw new Error("Failed to evaluate photo.");

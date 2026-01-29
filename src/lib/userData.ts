@@ -1,4 +1,5 @@
 import { AnalysisResult, LocalizedText } from './photoAnalysis';
+import { ScoringResult } from './photoScoring';
 import { Pose } from '@/data/poses';
 
 export interface SavedAnalysis {
@@ -18,11 +19,29 @@ export interface SavedAnalysis {
     tips: LocalizedText;
 }
 
+export interface SavedScore {
+    id: string; // timestamp
+    date: string; // ISO date
+    thumbnail: string; // Base64 Data URL (resized)
+    score: number;
+    title: LocalizedText;
+    criteria: {
+        composition: number;
+        lighting: number;
+        creativity: number;
+    };
+    feedback: {
+        good: LocalizedText;
+        improvement: LocalizedText;
+    };
+}
+
 export interface UserData {
     id: string;
     savedPoseIds: string[];
     customPoses: Pose[];
     history: SavedAnalysis[];
+    scoringHistory: SavedScore[];
 }
 
 const STORAGE_PREFIX = 'user_data_';
@@ -38,7 +57,8 @@ export const getUserData = (userId: string): UserData => {
         id: userId,
         savedPoseIds: [],
         customPoses: [],
-        history: []
+        history: [],
+        scoringHistory: []
     };
 
     if (data) {
@@ -49,7 +69,8 @@ export const getUserData = (userId: string): UserData => {
                 ...initialData,
                 ...parsed, // Overwrite with saved data
                 customPoses: parsed.customPoses || [], // Explicitly fallback if missing
-                history: parsed.history || []
+                history: parsed.history || [],
+                scoringHistory: parsed.scoringHistory || []
             };
         } catch (e) {
             console.error('Failed to parse user data', e);
@@ -167,6 +188,41 @@ export const deleteAnalysisResult = (userId: string, resultId: string) => {
 export const deleteCustomPose = (userId: string, poseId: string) => {
     const data = getUserData(userId);
     data.customPoses = data.customPoses.filter(item => item.id !== poseId);
+    saveUserData(data);
+    window.dispatchEvent(new CustomEvent('userDataChanged', { detail: { userId } }));
+};
+
+export const saveScoringResult = async (userId: string, result: ScoringResult, imageSrc: string) => {
+    const data = getUserData(userId);
+    const thumbnail = await createThumbnail(imageSrc);
+
+    const record: SavedScore = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        thumbnail: thumbnail,
+        score: result.score,
+        title: result.title,
+        criteria: result.criteria,
+        feedback: result.feedback
+    };
+
+    data.scoringHistory = data.scoringHistory || [];
+    data.scoringHistory.unshift(record);
+
+    // Limit to last 20
+    if (data.scoringHistory.length > 20) {
+        data.scoringHistory = data.scoringHistory.slice(0, 20);
+    }
+
+    saveUserData(data);
+    window.dispatchEvent(new CustomEvent('userDataChanged', { detail: { userId } }));
+};
+
+export const deleteScoringResult = (userId: string, resultId: string) => {
+    const data = getUserData(userId);
+    if (!data.scoringHistory) return;
+
+    data.scoringHistory = data.scoringHistory.filter(item => item.id !== resultId);
     saveUserData(data);
     window.dispatchEvent(new CustomEvent('userDataChanged', { detail: { userId } }));
 };

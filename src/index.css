@@ -2,14 +2,17 @@
 
 :root {
   /* Premium Color Palette (HSL) */
-  --color-primary: 240 5% 10%; /* Almost Black */
+  --color-primary: 240 5% 10%;
+  /* Almost Black */
   --color-primary-foreground: 0 0% 100%;
-  
-  --color-background: 30 20% 98%; /* Warm Off-white */
+
+  --color-background: 30 20% 98%;
+  /* Warm Off-white */
   --color-surface: 0 0% 100%;
   --color-surface-dim: 30 15% 94%;
-  
-  --color-accent: 25 30% 85%; /* Soft Sand */
+
+  --color-accent: 25 30% 85%;
+  /* Soft Sand */
   --color-accent-foreground: 240 5% 10%;
 
   --color-text-main: 240 4% 16%;
@@ -25,13 +28,16 @@
   --font-body: 'Inter', sans-serif;
 }
 
+
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: var(--font-body);
   background-color: hsl(var(--color-background));
@@ -40,7 +46,12 @@ html, body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   line-height: 1.2;
   font-weight: 500;
