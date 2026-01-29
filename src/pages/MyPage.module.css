@@ -191,18 +191,22 @@
 }
 
 .historyThumb {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     border-radius: 8px;
     object-fit: cover;
     background: #f0f0f0;
     border: 1px solid #eee;
+    flex-shrink: 0;
+    /* Prevent shrinking */
 }
 
 .historyInfo {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    /* Center content vertically */
     gap: 4px;
     min-width: 0;
     /* Important for text-overflow to work if needed */

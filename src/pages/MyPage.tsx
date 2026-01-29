@@ -174,9 +174,9 @@ export default function MyPage() {
                                                         alt="Thumbnail"
                                                         className={styles.historyThumb}
                                                     />
-                                                    <div className={styles.historyInfo}>
+                                                    <div className={styles.historyInfo} style={{ alignItems: 'center' }}>
                                                         <div className={styles.historyText}>
-                                                            <span style={{ fontWeight: 'bold', color: '#FF6B6B', fontSize: '1.2rem' }}>
+                                                            <span style={{ fontWeight: 'bold', color: '#FF6B6B', fontSize: '1.5rem' }}>
                                                                 {item.score}pts
                                                             </span>
                                                         </div>
