@@ -113,8 +113,12 @@ export default function MyPage() {
                                                             alt="Thumbnail"
                                                             className={styles.historyThumb}
                                                         />
-                                                        {/* Text removed as per request, just image */}
-                                                        <div style={{ flex: 1 }}></div>
+                                                        <div className={styles.historyInfo}>
+                                                            <div className={styles.historyDate}>{new Date(item.date).toLocaleDateString()}</div>
+                                                            <div className={styles.historyText}>
+                                                                <span className={styles.desktopText}>{summaryText}</span>
+                                                            </div>
+                                                        </div>
                                                         <button
                                                             className={styles.deleteBtn}
                                                             onClick={(e) => {
@@ -174,11 +178,13 @@ export default function MyPage() {
                                                         alt="Thumbnail"
                                                         className={styles.historyThumb}
                                                     />
-                                                    <div className={styles.historyInfo} style={{ alignItems: 'center' }}>
+                                                    <div className={styles.historyInfo}>
+                                                        <div className={styles.historyDate}>{new Date(item.date).toLocaleDateString()}</div>
                                                         <div className={styles.historyText}>
-                                                            <span style={{ fontWeight: 'bold', color: '#FF6B6B', fontSize: '1.5rem' }}>
+                                                            <span className={styles.scoreEmphasis}>
                                                                 {item.score}pts
                                                             </span>
+                                                            <span className={styles.desktopText}>{getText(item.title)}</span>
                                                         </div>
                                                     </div>
                                                     <button

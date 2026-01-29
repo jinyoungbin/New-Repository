@@ -191,14 +191,13 @@
 }
 
 .historyThumb {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 8px;
     object-fit: cover;
     background: #f0f0f0;
     border: 1px solid #eee;
     flex-shrink: 0;
-    /* Prevent shrinking */
 }
 
 .historyInfo {
@@ -206,17 +205,60 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* Center content vertically */
     gap: 4px;
     min-width: 0;
-    /* Important for text-overflow to work if needed */
 }
 
 .historyDate {
     font-size: 0.8rem;
     color: var(--color-text-muted);
     white-space: nowrap;
-    /* Prevent date from wrapping */
+}
+
+.scoreEmphasis {
+    font-weight: bold;
+    color: #FF6B6B;
+    font-size: 1.2rem;
+    margin-right: 8px;
+}
+
+/* Base Styles (Desktop Default) */
+.historyThumb {
+    width: 60px;
+    height: 60px;
+}
+
+.desktopText {
+    display: inline;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .historyThumb {
+        width: 80px;
+        height: 80px;
+    }
+
+    .historyInfo {
+        align-items: center;
+    }
+
+    /* Hide Date on Mobile */
+    .historyDate {
+        display: none;
+    }
+
+    /* Hide regular Desktop text */
+    .desktopText {
+        display: none !important;
+    }
+
+    /* Emphasize Score on Mobile */
+    .scoreEmphasis {
+        font-size: 1.5rem;
+        margin-right: 0;
+        display: block;
+    }
 }
 
 @media (max-width: 480px) {
@@ -228,10 +270,6 @@
     .historyThumb {
         width: 50px;
         height: 50px;
-    }
-
-    .historyDate {
-        font-size: 0.75rem;
     }
 }
 
