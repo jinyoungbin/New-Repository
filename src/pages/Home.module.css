@@ -1,63 +1,31 @@
 .main {
   width: 100%;
   min-height: 100vh;
-  /* Changed from height to min-height */
-  /* overflow: hidden; Removed to allow scrolling */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 0;
-  /* Added padding to ensure spacing on top/bottom */
+  padding: 4rem 0;
+  /* Increased padding */
+  overflow: visible;
+  /* Explicitly allow overflow */
 }
 
-.splitLayout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 100%;
-  max-width: 1400px;
-  /* height: 90vh; Removed fixed height */
-  gap: 2rem;
-  padding: 0 4rem;
-}
-
-.featureCol {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  /* Align smoothly from top area */
-  position: relative;
-  /* Unified Background: No alternating gray */
-}
-
-.featureCol.altBg {
-  /* Disabling the gray background to unify the look */
-  background: transparent;
-  border: none;
-}
-
-.featureContent {
-  display: flex;
-  flex-direction: column-reverse;
-  /* Image Top, Text Bottom */
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
-  max-width: 550px;
-  text-align: center;
-}
+/* ... splitLayout ... */
 
 .header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
+  /* Use gap for spacing instead of space-between */
   margin-bottom: 2rem;
-  min-height: 300px;
-  /* Fixed height for perfect alignment */
-  justify-content: space-between;
-  /* Title at top, Button at bottom */
-  padding-bottom: 10px;
+  height: auto;
+  /* Allow auto height */
+  min-height: auto;
+  /* Remove fixed constraint */
+  justify-content: flex-start;
+  /* Stack from top */
+  padding-bottom: 20px;
 }
 
 .visualWrapper {
