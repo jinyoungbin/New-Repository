@@ -37,6 +37,8 @@ export function shareKakao(title: string, description: string, imageUrl?: string
     }
 
     const targetUrl = linkUrl || window.location.href; // Use specific URL or current page
+    // alert(`Debug: Checking Link URL\n${targetUrl}`); // Debugging line
+
 
     try {
         window.Kakao.Share.sendDefault({
