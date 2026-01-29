@@ -36,7 +36,32 @@ export function shareKakao(title: string, description: string, imageUrl?: string
         return;
     }
 
-    const targetUrl = linkUrl || window.location.href; // Use specific URL or current page
+    const PRODUCTION_DOMAIN = 'https://new-repository-011.pages.dev';
+
+    // Logic to enforce production URL specifically for shared links
+    let finalTargetUrl = PRODUCTION_DOMAIN;
+
+    if (linkUrl) {
+        if (linkUrl.startsWith('http')) {
+            // If it's already a full URL, check if it's localhost and replace it
+            if (linkUrl.includes('localhost') || linkUrl.includes('127.0.0.1')) {
+                try {
+                    const urlObj = new URL(linkUrl);
+                    finalTargetUrl = `${PRODUCTION_DOMAIN}${urlObj.pathname}`;
+                } catch {
+                    finalTargetUrl = `${PRODUCTION_DOMAIN}/scoring`;
+                }
+            } else {
+                finalTargetUrl = linkUrl;
+            }
+        } else {
+            // It's a relative path, append to production domain
+            finalTargetUrl = `${PRODUCTION_DOMAIN}${linkUrl.startsWith('/') ? '' : '/'}${linkUrl}`;
+        }
+    } else {
+        // Fallback to home or specific logic
+        finalTargetUrl = PRODUCTION_DOMAIN;
+    }
 
     try {
         window.Kakao.Share.sendDefault({
@@ -46,8 +71,8 @@ export function shareKakao(title: string, description: string, imageUrl?: string
                 description: description,
                 imageUrl: imageUrl || 'https://via.placeholder.com/600x400?text=PoseDirector',
                 link: {
-                    mobileWebUrl: targetUrl,
-                    webUrl: targetUrl,
+                    mobileWebUrl: finalTargetUrl,
+                    webUrl: finalTargetUrl,
                 },
                 imageWidth: 600,
                 imageHeight: 600,
@@ -56,15 +81,15 @@ export function shareKakao(title: string, description: string, imageUrl?: string
                 {
                     title: '이 점수 이겨보기 👊',
                     link: {
-                        mobileWebUrl: targetUrl,
-                        webUrl: targetUrl,
+                        mobileWebUrl: finalTargetUrl,
+                        webUrl: finalTargetUrl,
                     },
                 },
                 {
                     title: '앱 구경하기 👀',
                     link: {
-                        mobileWebUrl: window.location.origin,
-                        webUrl: window.location.origin,
+                        mobileWebUrl: PRODUCTION_DOMAIN,
+                        webUrl: PRODUCTION_DOMAIN,
                     },
                 }
             ],
