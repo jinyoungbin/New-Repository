@@ -138,6 +138,7 @@ export const subscribeToUserData = (userId: string, onUpdate: (data: UserData) =
                 });
             }
         }
+    },
         (error) => {
             console.error("Firestore subscription error:", error);
             if (error.code === 'permission-denied') {
