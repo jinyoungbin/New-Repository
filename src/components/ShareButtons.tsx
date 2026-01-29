@@ -7,9 +7,10 @@ interface ShareButtonsProps {
     url?: string;
     imageUrl?: string;
     imageFile?: File | null; // Optional file to upload
+    buttonTitle?: string; // Optional custom button text
 }
 
-export default function ShareButtons({ title, description, url = window.location.href, imageUrl, imageFile }: ShareButtonsProps) {
+export default function ShareButtons({ title, description, url = window.location.href, imageUrl, imageFile, buttonTitle }: ShareButtonsProps) {
     const [isSharing, setIsSharing] = useState(false);
 
     const handleTwitter = () => {
@@ -41,7 +42,7 @@ export default function ShareButtons({ title, description, url = window.location
             }
         }
 
-        shareKakao(title, description, finalImageUrl, url);
+        shareKakao(title, description, finalImageUrl, url, buttonTitle);
         setIsSharing(false);
     };
 
