@@ -13,6 +13,23 @@ export function initKakao() {
     }
 }
 
+export async function uploadKakaoImage(file: File): Promise<string> {
+    if (!window.Kakao || !window.Kakao.isInitialized()) {
+        console.warn('Kakao SDK not initialized');
+        return '';
+    }
+
+    try {
+        const response = await window.Kakao.Share.uploadImage({
+            file: [file]
+        });
+        return response.infos.original.url;
+    } catch (e) {
+        console.error('Kakao Image Upload Failed', e);
+        return '';
+    }
+}
+
 export function shareKakao(title: string, description: string, imageUrl?: string, linkUrl?: string) {
     if (!window.Kakao || !window.Kakao.isInitialized()) {
         console.warn('Kakao SDK not initialized');
